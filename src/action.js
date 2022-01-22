@@ -20,9 +20,10 @@ async function run() {
   const randomPos = Math.round(Math.random() * 1000);
   const url = `https://api.tenor.com/v1/search?q=${encodeURIComponent(searchTerm)}&pos=${randomPos}&limit=1&media_filter=minimal&contentfilter=high`
 
-  console.log(`Searching Tenor: ${url}`)
+  console.log(`Searching Tenor for you: ${url}`)
 
   const response = await fetch(`${url}&key=${TENOR_TOKEN}`);
+  console.log('response', response);
   const { results } = await response.json();
   console.log('results', results);
   console.log('results', results[0]);
