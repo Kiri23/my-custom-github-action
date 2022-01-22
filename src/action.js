@@ -24,6 +24,8 @@ async function run() {
 
   const response = await fetch(`${url}&key=${TENOR_TOKEN}`);
   const { results } = await response.json();
+  console.log('results', results);
+  console.log('results', results[0]);
   const gifUrl = results[0].media[0].tinygif.url;
 
   console.log(`Found gif from Tenor: ${gifUrl}`);
