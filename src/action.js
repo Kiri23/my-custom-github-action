@@ -4,15 +4,36 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 const {PivotalTracker} = require('../library/')
 
+const getBranchName = (eventName, payload) => {
+  let branchName;
+  switch (eventName) {
+      case 'push':
+          branchName = payload.ref.replace('refs/heads/', '');
+          break;
+      case 'pull_request':
+          branchName = payload.pull_request.head.ref;
+          break;
+      default:
+          throw new Error(`Invalid event name when retrieving branch name: ${eventName}`);
+  }
+  return branchName;
+}
+
+
 async function run() {
   const GITHUB_TOKEN = core.getInput('GITHUB_TOKEN');
   const PIVOTAL_TOKEN = core.getInput('PIVOTAL_TOKEN') || process.env.PIVOTAL_TOKEN;
   const PROJECT_ID = core.getInput('PROJECT_ID') || process.env.PROJECT_ID;
 
-  // const eventName = github.context.eventName;
-  // const branchName = getBranchName(eventName, github.context.payload);
+  const eventName = github.context.eventName;
+  const branchName = getBranchName(eventName, github.context.payload);
+  // const branchName = '180748928-pivotal'
+  const lookForTicketNumberRegex = /[^a-z-.#]\ *([0-9]){7}\d/g;
+  let storyId = branchName.match(lookForTicketNumberRegex);
+  if (storyId) storyId = storyId.toString().trim()
+  console.log(storyId)
   // const storyId = '180952984' // regex expresion to filter number
-  const storyId = '180864555' // no blockers
+  // const storyId = '180864555' // no blockers
 
   const Pivotal = new PivotalTracker(PIVOTAL_TOKEN,PROJECT_ID);
   const storyHasBlockers = await Pivotal.storyHasBlockers(storyId);
@@ -25,20 +46,7 @@ run().catch(e => {
   core.setFailed(e.message)
 });
 
-const getBranchName = (eventName, payload) => {
-  let branchName;
-  switch (eventName) {
-      case 'push':
-          branchName = payload.ref.replace('refs/heads/', '');
-          break;
-      case 'pull_request':
-          branchName = payload.pull_request.head.ref;
-          break;
-      default:
-          throw new Error(`Invalid event name: ${eventName}`);
-  }
-  return branchName;
-}
+
 
 /**
  *   const { context = {} } = github;
