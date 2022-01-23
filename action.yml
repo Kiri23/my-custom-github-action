@@ -1,20 +1,16 @@
-name: 'PR Thank You Action'
-description: 'Demo for tutorial'
+name: 'Pivotal Stories blockers'
+description: 'Block a Pull Request if your story in pivotal has a blocker'
 author: 'Christian Nogueras'
 
 inputs:
   GITHUB_TOKEN:
     description: 'GitHub token'
     required: true
-  TENOR_TOKEN:
-    description: 'Tenor API token'
+  PIVOTAL_TOKEN:
+    description: 'Pivotal tracker token'
     required: true
-  message:
-    description: 'Message that gets sent to new pull requests'
-    default: 'Thank you for submitting a pull request! We will try to review this as soon as we can.'
-  searchTerm:
-    description: 'Term that gets search for the Tenor API'
-    default: 'thank you'
+  PROJECT_ID:
+    description: 'Pivotal tracker project id'
 
 runs:
   using: 'node12'
