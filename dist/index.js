@@ -5970,6 +5970,7 @@ run().catch(e => {
 
 
 /**
+ * Test coomit
  *   const { context = {} } = github;
   const { pull_request } = context.payload;
 
@@ -5997,17 +5998,14 @@ run().catch(e => {
 const getTicketNumberFromBranchName = (branchName) => {
     const lookForTicketNumberRegex = /[^a-z-.#]\ *([0-9]){7}\d/g;
     let storyId = branchName.match(lookForTicketNumberRegex);
-    if (storyId) storyId = storyId.toString().trim()
+    if (storyId) return storyId.toString().trim()
 }
 const getBranchName = (eventName, payload) => {
-    let branchName;
     switch (eventName) {
         case 'push':
-            branchName = payload.ref.replace('refs/heads/', '');
-            break;
+            return payload.ref.replace('refs/heads/', '');
         case 'pull_request':
-            branchName = payload.pull_request.head.ref;
-            break;
+            return payload.pull_request.head.ref;
         default:
             throw new Error(`Invalid event name when retrieving branch name: ${eventName}`);
     }
