@@ -27,6 +27,7 @@ run().catch(e => {
 
 
 /**
+ * Test coomit
  *   const { context = {} } = github;
   const { pull_request } = context.payload;
 
