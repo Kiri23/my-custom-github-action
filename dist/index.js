@@ -5954,7 +5954,8 @@ async function run() {
 
   // const eventName = github.context.eventName;
   // const branchName = getBranchName(eventName, github.context.payload);
-  const storyId = '180952984' // regex expresion to filter number
+  // const storyId = '180952984' // regex expresion to filter number
+  const storyId = '180864555' // no blockers
 
   const Pivotal = new PivotalTracker(PIVOTAL_TOKEN,PROJECT_ID);
   const storyHasBlockers = await Pivotal.storyHasBlockers(storyId);
@@ -6000,6 +6001,7 @@ const getBranchName = (eventName, payload) => {
     body: `${message}\n\n<img src="${gifUrl}" alt="${searchTerm}" />`
   });
  */
+
 
 /***/ }),
 
