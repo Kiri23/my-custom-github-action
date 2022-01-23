@@ -2,7 +2,7 @@ name: Test
 
 on:
   pull_request:
-    types: [opened]
+    types: [opened, synchronize]
 
 jobs:
   test:
@@ -12,4 +12,5 @@ jobs:
       - uses: ./
         with:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          TENOR_TOKEN: ${{secrets.TENOR_TOKEN}}
+          PIVOTAL_TOKEN: ${{secrets.PIVOTAL_TOKEN}}
+          PROJECT_ID: ${{secrets.PROJECT_ID}}
