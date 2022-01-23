@@ -1,4 +1,5 @@
 const getTicketNumberFromBranchName = (branchName) => {
+    console.log(branchName);
     const lookForTicketNumberRegex = /[^a-z-.#]\ *([0-9]){7}\d/g;
     let storyId = branchName.match(lookForTicketNumberRegex);
     if (storyId) storyId = storyId.toString().trim()
