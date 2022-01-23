@@ -16,7 +16,7 @@ class PivotalTracker {
         if (blockers && blockers.kind === "error"){
             const errorMessage = blockers.generalProblem || blockers.error || blockers.code
             const possibleFix = blockers.possible_fix && blockers.possible_fix;
-            throw new Error(`${errorMessage} Possible fix: ${possibleFix}`)
+            throw new Error(`${errorMessage} ${possibleFix ? `Possible fix: ${possibleFix}` : ''}`)
         }
         if (!Array.isArray(blockers)){
             throw new Error(`Expect response to be of type Array instead it got ${typeof blockers}`)
