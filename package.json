@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/colbyfayock/demo-action-pull-request.git"
   },
-  "author": "Colby Fayock <hello@colbyfayock.com>",
+  "author": "CHristian Nogueras",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/colbyfayock/demo-action-pull-request/issues"
