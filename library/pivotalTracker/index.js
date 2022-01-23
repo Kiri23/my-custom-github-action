@@ -7,8 +7,6 @@ class PivotalTracker {
         this.projectId = projectId;
     }
     async getBlockersOfStory(storyId){
-        // call the fetch endpoint
-        console.log('Calling the fetch endpoint', this.projectId, this.token);
         const endpoint = `${this.baseUrl}projects/${this.projectId}/stories/${storyId}/blockers`
         const response = await fetch(endpoint, {method:'GET', headers:{'X-TrackerToken': this.token}});
         return await response.json();
