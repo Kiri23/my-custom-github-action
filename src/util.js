@@ -4,14 +4,11 @@ const getTicketNumberFromBranchName = (branchName) => {
     if (storyId) storyId = storyId.toString().trim()
 }
 const getBranchName = (eventName, payload) => {
-    let branchName;
     switch (eventName) {
         case 'push':
-            branchName = payload.ref.replace('refs/heads/', '');
-            break;
+            return payload.ref.replace('refs/heads/', '');
         case 'pull_request':
-            branchName = payload.pull_request.head.ref;
-            break;
+            return payload.pull_request.head.ref;
         default:
             throw new Error(`Invalid event name when retrieving branch name: ${eventName}`);
     }
