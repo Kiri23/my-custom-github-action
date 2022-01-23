@@ -8,7 +8,7 @@ async function run() {
   const GITHUB_TOKEN = core.getInput('GITHUB_TOKEN');
   const PIVOTAL_TOKEN = core.getInput('PIVOTAL_TOKEN') || process.env.PIVOTAL_TOKEN;
   const PROJECT_ID = core.getInput('PROJECT_ID') || process.env.PROJECT_ID;
-  
+
   // const eventName = github.context.eventName;
   // const branchName = getBranchName(eventName, github.context.payload);
   const storyId = '180952984' // regex expresion to filter number
@@ -16,13 +16,11 @@ async function run() {
   const Pivotal = new PivotalTracker(PIVOTAL_TOKEN,PROJECT_ID);
   const storyHasBlockers = await Pivotal.storyHasBlockers(storyId);
   if (storyHasBlockers) {
-    // console.log(`Are you sure you want to merge this Pull request? This PR has a blocker in pivotal for the story ${storyId}`);
-    // core.setFailed(`Are you sure you want to merge this Pull request? This PR has a blocker in pivotal for the story ${storyId}`)
+    core.setFailed(`Are you sure you want to merge this Pull request? This PR has a blocker in pivotal for the story ${storyId}`)
   } 
 }
 
 run().catch(e => {
-  console.log('Error handler parent ', e);
   core.setFailed(e.message)
 });
 
