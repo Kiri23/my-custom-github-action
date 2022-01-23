@@ -14,7 +14,7 @@ async function run() {
   const storyId = '180952984' // regex expresion to filter number
 
   const Pivotal = new PivotalTracker(PIVOTAL_TOKEN,PROJECT_ID);
-  const storyHasBlockers = await Pivotal.storyHasBlockers(storyId);
+  const storyHasBlockers = await Pivotal.storyHasBlockers("180864555");
   if (storyHasBlockers) {
     core.setFailed(`Are you sure you want to merge this Pull request? This PR has a blocker in pivotal for the story ${storyId}`)
   } 
