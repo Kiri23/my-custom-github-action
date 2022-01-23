@@ -2,39 +2,48 @@ require('dotenv').config();
 const fetch = require('node-fetch');
 const core = require('@actions/core');
 const github = require('@actions/github');
+const {PivotalTracker} = require('../library/')
 
 async function run() {
   const GITHUB_TOKEN = core.getInput('GITHUB_TOKEN');
-  const TENOR_TOKEN = core.getInput('TENOR_TOKEN') || process.env.TENOR_TOKEN;
-  const message = core.getInput('message') || 'Thank you!';
-  const searchTerm = core.getInput('searchTerm') || 'thank you';
+  const PIVOTAL_TOKEN = core.getInput('PIVOTAL_TOKEN') || process.env.PIVOTAL_TOKEN;
+  const PROJECT_ID = core.getInput('PROJECT_ID') || process.env.PROJECT_ID;
 
-  if ( typeof TENOR_TOKEN !== 'string' ) {
-    throw new Error('Invalid TENOR_TOKEN: did you forget to set it in your action config?');
+  // const eventName = github.context.eventName;
+  // const branchName = getBranchName(eventName, github.context.payload);
+  const storyId = '180952984' // regex expresion to filter number
+
+  const Pivotal = new PivotalTracker(PIVOTAL_TOKEN,PROJECT_ID);
+  const storyHasBlockers = await Pivotal.storyHasBlockers(storyId);
+  if (storyHasBlockers) {
+    core.setFailed(`Are you sure you want to merge this Pull request? This PR has a blocker in pivotal for the story ${storyId}`)
+  } 
+}
+
+run().catch(e => {
+  core.setFailed(e.message)
+});
+
+const getBranchName = (eventName, payload) => {
+  let branchName;
+  switch (eventName) {
+      case 'push':
+          branchName = payload.ref.replace('refs/heads/', '');
+          break;
+      case 'pull_request':
+          branchName = payload.pull_request.head.ref;
+          break;
+      default:
+          throw new Error(`Invalid event name: ${eventName}`);
   }
+  return branchName;
+}
 
-  if ( typeof GITHUB_TOKEN !== 'string' ) {
-    throw new Error('Invalid GITHUB_TOKEN: did you forget to set it in your action config?');
-  }
-
-  const randomPos = Math.round(Math.random() * 1000);
-  const url = `https://api.tenor.com/v1/search?q=${encodeURIComponent(searchTerm)}&pos=${randomPos}&limit=1&media_filter=minimal&contentfilter=high`
-
-  console.log(`Searching Tenor for you: ${url}`)
-
-  const response = await fetch(`${url}&key=${TENOR_TOKEN}`);
-  console.log('response', response);
-  const { results } = await response.json();
-  console.log('results', results);
-  console.log('results', results[0]);
-  const gifUrl = results[0].media[0].tinygif.url;
-
-  console.log(`Found gif from Tenor: ${gifUrl}`);
-
-  const { context = {} } = github;
+/**
+ *   const { context = {} } = github;
   const { pull_request } = context.payload;
 
-  if ( !pull_request ) {
+ * if ( !pull_request ) {
     throw new Error('Could not find pull request!')
   };
 
@@ -47,6 +56,4 @@ async function run() {
     issue_number: pull_request.number,
     body: `${message}\n\n<img src="${gifUrl}" alt="${searchTerm}" />`
   });
-}
-
-run().catch(e => core.setFailed(e.message));
+ */
