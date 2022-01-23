@@ -20,7 +20,10 @@ class PivotalTracker {
             const possibleFix = blockers.possible_fix && blockers.possible_fix;
             throw new Error(`${errorMessage} Possible fix: ${possibleFix}`)
         }
-        return blockers.data.every(blocker => blocker.resolved)
+        if (!Array.isArray(blockers)){
+            throw new Error(`Expect response to be of type Array instead it got ${typeof blockers}`)
+        }
+        return blockers.some(blocker => blocker.resolved === false)
     }
 }
 
